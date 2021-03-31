@@ -1,10 +1,14 @@
 .App {
   text-align: center;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  padding-top: 2em;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+.formPoc > label {
+  padding-top: 0.5em;
+  padding-bottom: 0.5em;
 }
 
 @media (prefers-reduced-motion: no-preference) {

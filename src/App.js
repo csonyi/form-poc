@@ -1,23 +1,31 @@
-import logo from './logo.svg';
+import React from 'react'
 import './App.css';
+import FormikForm from './forms/FromikForm';
+import ReactHookForm from './forms/ReactHookForm';
+
+import View from '@instructure/ui-layout/lib/View'
+
+const viewProps = {
+  as: 'div',
+  margin: 'small',
+  padding: 'xx-large',
+  textAlign: 'center',
+  background: 'primary',
+  borderRadius: 'medium',
+  shadow: 'topmost'
+}
 
 function App() {
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <View { ...viewProps }>
+        <h1>React Hook Form</h1>
+        <ReactHookForm />
+      </View>
+      <View { ...viewProps }>
+        <h1>Formik</h1>
+        <FormikForm />
+      </View>
     </div>
   );
 }

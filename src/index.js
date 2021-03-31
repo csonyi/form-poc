@@ -4,10 +4,13 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 
+import { canvas } from '@instructure/ui-themes'
+import { EmotionThemeProvider } from '@instructure/emotion'
+
 ReactDOM.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>,
+    <EmotionThemeProvider theme={canvas}>
+      <App />
+    </EmotionThemeProvider>,
   document.getElementById('root')
 );
 
