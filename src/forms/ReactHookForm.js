@@ -10,7 +10,6 @@ const cbLabel = "I agree to the Acceptable Use Policy and acknowledge the Privac
 
 export default function ReactHookForm(props) {
   const {
-    errors,
     formState,
     register,
     control,
@@ -25,9 +24,9 @@ export default function ReactHookForm(props) {
   })
 
   const getErrorsForField = (name) => {
-    if(errors[name]) {
+    if(formState.errors[name]) {
       return [{
-        text: errors[name].message,
+        text: formState.errors[name].message,
         type: 'error',
       }]
     }

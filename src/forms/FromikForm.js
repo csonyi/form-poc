@@ -35,9 +35,9 @@ const validationSchema = yup.object().shape({
     .required('Email confirmation is required')
     .max(100, "Email confirmation can't exceed ${max} characters")
     .email('Must be a valid email address')
-    .oneOf([yup.ref('email'), null], "Email addresses don't match"),
+    .oneOf([yup.ref('email')], "Email addresses don't match"),
   termsOfUse: yup.bool()
-    .oneOf([true, null], 'You must agree to the Acceptable Use Policy'),
+    .oneOf([true], 'You must agree to the Acceptable Use Policy'),
 })
 
 const FormikForm = (props) => {
