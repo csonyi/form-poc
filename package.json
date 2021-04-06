@@ -5,8 +5,8 @@
   "dependencies": {
     "@instructure/canvas-theme": "^6.4.0",
     "@instructure/emotion": "^8.0.0",
-    "@instructure/ui-buttons": "^8.0.0",
-    "@instructure/ui-checkbox": "^8.0.0",
+    "@instructure/ui-buttons": "^6.27.0",
+    "@instructure/ui-checkbox": "^6.27.0",
     "@instructure/ui-forms": "^6.4.0",
     "@instructure/ui-layout": "^6.27.0",
     "@instructure/ui-themes": "^6.4.0",
@@ -18,7 +18,8 @@
     "react-dom": "16.8",
     "react-hook-form": "^6.15.5",
     "react-scripts": "4.0.3",
-    "web-vitals": "^1.0.1"
+    "web-vitals": "^1.0.1",
+    "yup": "^0.32.9"
   },
   "scripts": {
     "start": "react-scripts start",

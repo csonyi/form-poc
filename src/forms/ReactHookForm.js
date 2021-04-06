@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { useForm } from "react-hook-form";
+import { useForm, Controller } from "react-hook-form";
 
 import TextInput from '@instructure/ui-forms/lib/TextInput'
 import Button from '@instructure/ui-buttons/lib/Button'
@@ -9,7 +9,17 @@ import Checkbox from '@instructure/ui-checkbox/lib/Checkbox'
 const cbLabel = "I agree to the Acceptable Use Policy and acknowledge the Privacy Policy."
 
 export default function ReactHookForm(props) {
-  const { register, handleSubmit, getValues, errors } = useForm()
+  const {
+    errors,
+    formState,
+    register,
+    control,
+    trigger,
+    handleSubmit,
+    getValues,
+    setValue,
+  } = useForm({ mode: "onTouched", reValidateMode: "onChange" })
+
   const onSubmit = (data) => console.table({
     Submitted: data
   })
@@ -30,7 +40,7 @@ export default function ReactHookForm(props) {
         name="name"
         type="text"
         label="Full Name"
-        messages={getErrorsForField("name")}
+        messages={getErrorsForField('name')}
         inputRef={register({
           required: 'Name is Required',
           maxLength: {
@@ -40,47 +50,55 @@ export default function ReactHookForm(props) {
         })}
        />
 
-       <TextInput
-        name="email"
-        type="email"
-        label="Email"
-        messages={getErrorsForField("email")}
-        inputRef={register({
-          required: 'Email is required',
-          maxLength: {
-            value: 100,
-            message: "Email can't exceed 100 characters"
-          },
-          pattern: {
-            value: /.+@.+/,
-            message: 'Must be a valid email address'
-          },
-        })}
-       />
-       <TextInput
-        name="confirmEmail"
-        type="email"
-        label="Confirm Email"
-        messages={getErrorsForField("confirmEmail")}
-        inputRef={register({
-          required: 'Email confirmation is required',
-          maxLength: {
-            value: 100,
-            message: "Email confirmation can't exceed 100 characters"
-          },
-          pattern: {
-            value: /.+@.+/,
-            message: 'Must be a valid email address'
-          },
-          validate: (confirmEmail) => confirmEmail === getValues("email") || "Email addresses don't match",
-        })}
-       />
-      <Checkbox
-        name="termsOfuse"
-        label={cbLabel}
-        inputRef={register({
+      <TextInput
+      name="email"
+      type="email"
+      label="Email"
+      messages={getErrorsForField('email')}
+      inputRef={register({
+        required: 'Email is required',
+        maxLength: {
+          value: 100,
+          message: "Email can't exceed 100 characters"
+        },
+        pattern: {
+          value: /.+@.+/,
+          message: 'Must be a valid email address'
+        },
+      })}
+      onChange={() => formState.touched.confirmEmail && trigger('confirmEmail')}
+      />
+      <TextInput
+      name="confirmEmail"
+      type="email"
+      label="Confirm Email"
+      messages={getErrorsForField('confirmEmail')}
+      inputRef={register({
+        required: 'Email confirmation is required',
+        maxLength: {
+          value: 100,
+          message: "Email confirmation can't exceed 100 characters"
+        },
+        pattern: {
+          value: /.+@.+/,
+          message: 'Must be a valid email address'
+        },
+        validate: (confirmEmail) => confirmEmail === getValues("email") || "Email addresses don't match",
+      })}
+      />
+      <Controller
+        name='termsOfUse'
+        render={(props) => (
+          <Checkbox
+            label={cbLabel}
+            messages={getErrorsForField('termsOfUse')}
+            onChange={(e) => setValue('termsOfUse', e.target.checked)}
+          />
+        )}
+        control={control}
+        rules={{
           required: 'You must agree to the Acceptable Use Policy',
-        })}
+        }}
       />
       <Button 
         type="submit" 
@@ -93,3 +111,15 @@ export default function ReactHookForm(props) {
     </form>
   )
 }
+
+/* 
+<Checkbox
+        name="termsOfuse"
+        label={cbLabel}
+        messages={getErrorsForField('termsOfUse')}
+        inputRef={register({
+          required: 'You must agree to the Acceptable Use Policy',
+          validate: (termsOfUse) => console.log(termsOfUse)
+        })}
+      />
+*/

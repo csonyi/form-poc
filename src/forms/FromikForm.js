@@ -1,6 +1,11 @@
+/* eslint-disable no-template-curly-in-string */
+/* eslint-disable-next-line no-undef */
+
 import React from 'react'
 
 import { Formik, Field, Form } from 'formik'
+
+import * as yup from "yup";
 
 import TextInput from '@instructure/ui-forms/lib/TextInput'
 import Button from '@instructure/ui-buttons/lib/Button'
@@ -8,16 +13,38 @@ import Checkbox from '@instructure/ui-checkbox/lib/Checkbox'
 
 const cbLabel = "I agree to the Acceptable Use Policy and acknowledge the Privacy Policy."
 
-const makeError = (text) => ({
-  text,
-  type: 'error',
+const createErrorFromMessage = (text) => {
+  if(text) {
+    return [{
+      text,
+      type: 'error',
+    }]
+  }
+  return []
+}
+
+const validationSchema = yup.object().shape({
+  name: yup.string()
+    .required('Name is required')
+    .max(255, "Name can't exceed ${max} characters"),
+  email: yup.string()
+    .required('Email is required')
+    .max(100, "Email can't exceed ${max} characters")
+    .email('Must be a valid email address'),
+  confirmEmail: yup.string()
+    .required('Email confirmation is required')
+    .max(100, "Email confirmation can't exceed ${max} characters")
+    .email('Must be a valid email address')
+    .oneOf([yup.ref('email'), null], "Email addresses don't match"),
+  termsOfUse: yup.bool()
+    .oneOf([true, null], 'You must agree to the Acceptable Use Policy'),
 })
 
-export default function FormikForm(props) {
-  const handleSubmit = (data) => {
-    console.log("Submitted:")
-    console.log(data)
-  }
+const FormikForm = (props) => {
+  const handleSubmit = (data) => console.table({
+    Submitted: data
+  })
+  
   const initialValues = {
     name: '',
     email: '',
@@ -25,52 +52,14 @@ export default function FormikForm(props) {
     termsOfUse: false,
   }
 
-  const nameValidate = (name) => {
-    if(name === '') {
-      return [makeError('Name is Required')]
-    }
-    if(name.length > 255) {
-      return [makeError("Name can't exceed 255 characters")]
-    }
-    return [];
-  }
-
-  const emailValidate = (email) => {
-    if(email === '') {
-      return [makeError('Email is required')]
-    }
-    if(email.length > 100) {
-      return [makeError("Email can't exceed 100 characters")]
-    }
-    if(!(/.+@.+/).test(email)) {
-      return [makeError('Must be a valid email address')]
-    }
-    return []
-  }
-
-  const confirmEmailValidate = (confirmEmail, email) => {
-    if(confirmEmail === '') {
-      return [makeError('Email confirmation is required')]
-    }
-    if(confirmEmail.length > 100) {
-      return [makeError("Email confirmation can't exceed 100 characters")]
-    }
-    if(!(/.+@.+/).test(confirmEmail)) {
-      return [makeError('Must be a valid email address')]
-    }
-    if(confirmEmail !== email) {
-      return [makeError("Email addresses don't match")]
-    }
-    return []
-  }
-
-  const validateTermsOfUse = (termsOfUse) => {
-    return (termsOfUse) ? [] : [makeError('You must agree to the Acceptable Use Policy')]
-  }
-
   return (
-    <Formik onSubmit={handleSubmit} initialValues={initialValues}>
-      {({ errors, values }) => (
+    <Formik
+      onSubmit={handleSubmit}
+      initialValues={initialValues}
+      validationSchema={validationSchema}
+      validateOnBlur
+    >
+      {({ errors, touched }) => (
         <Form className="formPoc">
           <Field 
             as={TextInput}
@@ -78,8 +67,7 @@ export default function FormikForm(props) {
             name="name"
             type="text"
             label="Full Name"
-            validate={nameValidate}
-            messages={errors.name}
+            messages={touched.name && createErrorFromMessage(errors.name)}
           />
           <Field
             as={TextInput}
@@ -87,8 +75,7 @@ export default function FormikForm(props) {
             name="email"
             type="email"
             label="Email"
-            validate={emailValidate}
-            messages={errors.email}
+            messages={touched.email && createErrorFromMessage(errors.email)}
           />
           <Field
             as={TextInput}
@@ -96,16 +83,14 @@ export default function FormikForm(props) {
             name="confirmEmail"
             type="email"
             label="Confirm Email"
-            validate={(confirmEmail) => confirmEmailValidate(confirmEmail, values.email)}
-            messages={errors.confirmEmail}
+            messages={touched.confirmEmail && createErrorFromMessage(errors.confirmEmail)}
           />
           <Field
             as={Checkbox}
             id="termsOfUse"
             name="termsOfUse"
             label={cbLabel}
-            validate={validateTermsOfUse}
-            messages={errors.termsOfUse}
+            messages={touched.termsOfUse && createErrorFromMessage(errors.termsOfUse)}
           />
           <Button 
             type="submit" 
@@ -120,3 +105,5 @@ export default function FormikForm(props) {
     </Formik>
   )
 }
+
+export default FormikForm;
