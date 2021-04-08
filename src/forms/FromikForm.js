@@ -40,7 +40,7 @@ const validationSchema = yup.object().shape({
     .oneOf([true], 'You must agree to the Acceptable Use Policy'),
 })
 
-const FormikForm = (props) => {
+const FormikForm = () => {
   const handleSubmit = (data) => console.table({
     Submitted: data
   })

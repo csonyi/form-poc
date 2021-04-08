@@ -8,7 +8,7 @@ import Checkbox from '@instructure/ui-checkbox/lib/Checkbox'
 
 const cbLabel = "I agree to the Acceptable Use Policy and acknowledge the Privacy Policy."
 
-export default function ReactHookForm(props) {
+export default function ReactHookForm() {
   const {
     formState,
     register,
@@ -87,7 +87,7 @@ export default function ReactHookForm(props) {
       />
       <Controller
         name='termsOfUse'
-        render={(props) => (
+        render={() => (
           <Checkbox
             label={cbLabel}
             messages={getErrorsForField('termsOfUse')}
